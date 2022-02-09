@@ -32,7 +32,7 @@ SOFTWARE.
 
 #define VERSION "3.0"
 
-#define HOSTNAME "PrintMon-" 
+#define HOSTNAME "PrintMon-"
 #define CONFIG "/conf.txt"
 
 /* Useful Constants */
@@ -40,8 +40,8 @@ SOFTWARE.
 #define SECS_PER_HOUR (3600UL)
 
 /* Useful Macros for getting elapsed time */
-#define numberOfSeconds(_time_) (_time_ % SECS_PER_MIN)  
-#define numberOfMinutes(_time_) ((_time_ / SECS_PER_MIN) % SECS_PER_MIN) 
+#define numberOfSeconds(_time_) (_time_ % SECS_PER_MIN)
+#define numberOfMinutes(_time_) ((_time_ / SECS_PER_MIN) % SECS_PER_MIN)
 #define numberOfHours(_time_) (_time_ / SECS_PER_HOUR)
 
 // Initialize the oled display for I2C_DISPLAY_ADDRESS
@@ -74,7 +74,7 @@ OverlayCallback overlays[] = { drawHeaderOverlay };
 OverlayCallback clockOverlay[] = { drawClockHeaderOverlay };
 int numberOfOverlays = 1;
 
-// Time 
+// Time
 TimeClient timeClient(UtcOffset);
 long lastEpoch = 0;
 long firstEpoch = 0;
@@ -102,39 +102,39 @@ int8_t getWifiQuality();
 ESP8266WebServer server(WEBSERVER_PORT);
 ESP8266HTTPUpdateServer serverUpdater;
 
-static const char WEB_ACTIONS[] PROGMEM =  "<a class='w3-bar-item w3-button' href='/'><i class='fa fa-home'></i> Home</a>"
-                      "<a class='w3-bar-item w3-button' href='/configure'><i class='fa fa-cog'></i> Configure</a>"
-                      "<a class='w3-bar-item w3-button' href='/configureweather'><i class='fa fa-cloud'></i> Weather</a>"
-                      "<a class='w3-bar-item w3-button' href='/systemreset' onclick='return confirm(\"Do you want to reset to default settings?\")'><i class='fa fa-undo'></i> Reset Settings</a>"
-                      "<a class='w3-bar-item w3-button' href='/forgetwifi' onclick='return confirm(\"Do you want to forget to WiFi connection?\")'><i class='fa fa-wifi'></i> Forget WiFi</a>"
-                      "<a class='w3-bar-item w3-button' href='/update'><i class='fa fa-wrench'></i> Firmware Update</a>"
-                      "<a class='w3-bar-item w3-button' href='https://github.com/Qrome' target='_blank'><i class='fa fa-question-circle'></i> About</a>";
+static const char WEB_ACTIONS[] PROGMEM =  "<a class='w3-bar-item w3-button' href='/'><i class='fa fa-home'></i> Accueil</a>"
+                      "<a class='w3-bar-item w3-button' href='/configure'><i class='fa fa-cog'></i> Paramètres</a>"
+                      "<a class='w3-bar-item w3-button' href='/configureweather'><i class='fa fa-cloud'></i> Météo</a>"
+                      "<a class='w3-bar-item w3-button' href='/systemreset' onclick='return confirm(\"Voulez-vous réinitialiser les paramètres par défaut ?\")'><i class='fa fa-undo'></i> Réinit. paramètres</a>"
+                      "<a class='w3-bar-item w3-button' href='/forgetwifi' onclick='return confirm(\"Voulez-vous oublier la connexion WiFi ?\")'><i class='fa fa-wifi'></i> Oublier WiFi</a>"
+                      "<a class='w3-bar-item w3-button' href='/update'><i class='fa fa-wrench'></i> Màj Firmware</a>"
+                      "<a class='w3-bar-item w3-button' href='https://github.com/Qrome' target='_blank'><i class='fa fa-question-circle'></i> A propos</a>";
 
 String CHANGE_FORM =  ""; // moved to config to make it dynamic
 
-static const char CLOCK_FORM[] PROGMEM = "<hr><p><input name='isClockEnabled' class='w3-check w3-margin-top' type='checkbox' %IS_CLOCK_CHECKED%> Display Clock when printer is off</p>"
-                      "<p><input name='is24hour' class='w3-check w3-margin-top' type='checkbox' %IS_24HOUR_CHECKED%> Use 24 Hour Clock (military time)</p>"
-                      "<p><input name='invDisp' class='w3-check w3-margin-top' type='checkbox' %IS_INVDISP_CHECKED%> Flip display orientation</p>"
-                      "<p><input name='useFlash' class='w3-check w3-margin-top' type='checkbox' %USEFLASH%> Flash System LED on Service Calls</p>"
-                      "<p><input name='hasPSU' class='w3-check w3-margin-top' type='checkbox' %HAS_PSU_CHECKED%> Use OctoPrint PSU control plugin for clock/blank</p>"
-                      "<p>Clock Sync / Weather Refresh (minutes) <select class='w3-option w3-padding' name='refresh'>%OPTIONS%</select></p>";
-                            
-static const char THEME_FORM[] PROGMEM =   "<p>Theme Color <select class='w3-option w3-padding' name='theme'>%THEME_OPTIONS%</select></p>"
-                      "<p><label>UTC Time Offset</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='utcoffset' value='%UTCOFFSET%' maxlength='12'></p><hr>"
-                      "<p><input name='isBasicAuth' class='w3-check w3-margin-top' type='checkbox' %IS_BASICAUTH_CHECKED%> Use Security Credentials for Configuration Changes</p>"
-                      "<p><label>User ID (for this interface)</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='userid' value='%USERID%' maxlength='20'></p>"
-                      "<p><label>Password </label><input class='w3-input w3-border w3-margin-bottom' type='password' name='stationpassword' value='%STATIONPASSWORD%'></p>"
-                      "<button class='w3-button w3-block w3-grey w3-section w3-padding' type='submit'>Save</button></form>";
+static const char CLOCK_FORM[] PROGMEM = "<hr><p><input name='isClockEnabled' class='w3-check w3-margin-top' type='checkbox' %IS_CLOCK_CHECKED%> Afficher l'heure lorsque l'imprimante est éteinte</p>"
+                      "<p><input name='is24hour' class='w3-check w3-margin-top' type='checkbox' %IS_24HOUR_CHECKED%> Afficher l'heure au format 24 heures</p>"
+                      "<p><input name='invDisp' class='w3-check w3-margin-top' type='checkbox' %IS_INVDISP_CHECKED%> Retourner l'affichage de l'écran</p>"
+                      "<p><input name='useFlash' class='w3-check w3-margin-top' type='checkbox' %USEFLASH%> Faire clignoter la LED du système lors des appels de service</p>"
+                      "<p><input name='hasPSU' class='w3-check w3-margin-top' type='checkbox' %HAS_PSU_CHECKED%> Utilisez le plugin de contrôle du PSU d'OctoPrint pour clock/blank</p>"
+                      "<p>Synchronisation de l'heure / rafraîchissement de la météo (minutes) <select class='w3-option w3-padding' name='refresh'>%OPTIONS%</select></p>";
 
-static const char WEATHER_FORM[] PROGMEM = "<form class='w3-container' action='/updateweatherconfig' method='get'><h2>Weather Config:</h2>"
-                      "<p><input name='isWeatherEnabled' class='w3-check w3-margin-top' type='checkbox' %IS_WEATHER_CHECKED%> Display Weather when printer is off</p>"
-                      "<label>OpenWeatherMap API Key (get from <a href='https://openweathermap.org/' target='_BLANK'>here</a>)</label>"
+static const char THEME_FORM[] PROGMEM =   "<p>Couleur Theme <select class='w3-option w3-padding' name='theme'>%THEME_OPTIONS%</select></p>"
+                      "<p><label>Décalage horaire UTC</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='utcoffset' value='%UTCOFFSET%' maxlength='12'></p><hr>"
+                      "<p><input name='isBasicAuth' class='w3-check w3-margin-top' type='checkbox' %IS_BASICAUTH_CHECKED%> Utiliser les identifiants pour les changements de configuration</p>"
+                      "<p><label>Utilisateur (pour cette interface)</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='userid' value='%USERID%' maxlength='20'></p>"
+                      "<p><label>Mot de passe </label><input class='w3-input w3-border w3-margin-bottom' type='password' name='stationpassword' value='%STATIONPASSWORD%'></p>"
+                      "<button class='w3-button w3-block w3-grey w3-section w3-padding' type='submit'>Sauvegarder</button></form>";
+
+static const char WEATHER_FORM[] PROGMEM = "<form class='w3-container' action='/updateweatherconfig' method='get'><h2>Paramètres météo:</h2>"
+                      "<p><input name='isWeatherEnabled' class='w3-check w3-margin-top' type='checkbox' %IS_WEATHER_CHECKED%> Afficher la météo lorsque l'imprimante est éteinte</p>"
+                      "<label>Clé API OpenWeatherMap (à obtenir à partir d'<a href='https://openweathermap.org/' target='_BLANK'>ici</a>)</label>"
                       "<input class='w3-input w3-border w3-margin-bottom' type='text' name='openWeatherMapApiKey' value='%WEATHERKEY%' maxlength='60'>"
-                      "<p><label>%CITYNAME1% (<a href='http://openweathermap.org/find' target='_BLANK'><i class='fa fa-search'></i> Search for City ID</a>) "
+                      "<p><label>%CITYNAME1% (<a href='http://openweathermap.org/find' target='_BLANK'><i class='fa fa-search'></i> Rechercher ID de la ville</a>) "
                       "<input class='w3-input w3-border w3-margin-bottom' type='text' name='city1' value='%CITY1%' onkeypress='return isNumberKey(event)'></p>"
-                      "<p><input name='metric' class='w3-check w3-margin-top' type='checkbox' %METRIC%> Use Metric (Celsius)</p>"
-                      "<p>Weather Language <select class='w3-option w3-padding' name='language'>%LANGUAGEOPTIONS%</select></p>"
-                      "<button class='w3-button w3-block w3-grey w3-section w3-padding' type='submit'>Save</button></form>"
+                      "<p><input name='metric' class='w3-check w3-margin-top' type='checkbox' %METRIC%> Utiliser le système métrique (Celsius)</p>"
+                      "<p>Langue de la météo <select class='w3-option w3-padding' name='language'>%LANGUAGEOPTIONS%</select></p>"
+                      "<button class='w3-button w3-block w3-grey w3-section w3-padding' type='submit'>Sauvegarder</button></form>"
                       "<script>function isNumberKey(e){var h=e.which?e.which:event.keyCode;return!(h>31&&(h<48||h>57))}</script>";
 
 static const char LANG_OPTIONS[] PROGMEM = "<option>ar</option>"
@@ -171,39 +171,39 @@ static const char LANG_OPTIONS[] PROGMEM = "<option>ar</option>"
                       "<option>zh_cn</option>"
                       "<option>zh_tw</option>";
 
-static const char COLOR_THEMES[] PROGMEM = "<option>red</option>"
-                      "<option>pink</option>"
-                      "<option>purple</option>"
-                      "<option>deep-purple</option>"
+static const char COLOR_THEMES[] PROGMEM = "<option>rouge</option>"
+                      "<option>rose</option>"
+                      "<option>violet</option>"
+                      "<option>violet-foncé</option>"
                       "<option>indigo</option>"
-                      "<option>blue</option>"
-                      "<option>light-blue</option>"
+                      "<option>bleu</option>"
+                      "<option>bleu-clair</option>"
                       "<option>cyan</option>"
-                      "<option>teal</option>"
-                      "<option>green</option>"
-                      "<option>light-green</option>"
-                      "<option>lime</option>"
-                      "<option>khaki</option>"
-                      "<option>yellow</option>"
-                      "<option>amber</option>"
+                      "<option>bleu-canard</option>"
+                      "<option>vert</option>"
+                      "<option>vert-clair</option>"
+                      "<option>citron-vert</option>"
+                      "<option>kaki</option>"
+                      "<option>jaune</option>"
+                      "<option>ambre</option>"
                       "<option>orange</option>"
-                      "<option>deep-orange</option>"
-                      "<option>blue-grey</option>"
-                      "<option>brown</option>"
-                      "<option>grey</option>"
-                      "<option>dark-grey</option>"
-                      "<option>black</option>"
-                      "<option>w3schools</option>";
-                            
+                      "<option>orange-foncé</option>"
+                      "<option>bleu-gris</option>"
+                      "<option>brun</option>"
+                      "<option>gris</option>"
+                      "<option>gris-foncé</option>"
+                      "<option>noir</option>"
+                      "<option>w3schools</option>" ;
 
-void setup() {  
+
+void setup() {
   Serial.begin(115200);
   SPIFFS.begin();
   delay(10);
-  
+
   //New Line to clear from start garbage
   Serial.println();
-  
+
   // Initialize digital pin for LED (little blue light on the Wemos D1 Mini)
   pinMode(externalLight, OUTPUT);
 
@@ -227,20 +227,20 @@ void setup() {
   display.setFont(ArialMT_Plain_16);
   display.drawString(64, 1, "Printer Monitor");
   display.setFont(ArialMT_Plain_10);
-  display.drawString(64, 18, "for " + printerClient.getPrinterType());
+  display.drawString(64, 18, "pour " + printerClient.getPrinterType());
   display.setFont(ArialMT_Plain_16);
-  display.drawString(64, 30, "By Qrome");
+  display.drawString(64, 30, "Par Qrome (fr)");
   display.drawString(64, 46, "V" + String(VERSION));
   display.display();
- 
+
   //WiFiManager
   //Local intialization. Once its business is done, there is no need to keep it around
   WiFiManager wifiManager;
-  
+
   // Uncomment for testing wifi manager
   //wifiManager.resetSettings();
   wifiManager.setAPCallback(configModeCallback);
-  
+
   String hostname(HOSTNAME);
   hostname += String(ESP.getChipId(), HEX);
   if (!wifiManager.autoConnect((const char *)hostname.c_str())) {// new addition
@@ -249,7 +249,7 @@ void setup() {
     ESP.reset();
     delay(5000);
   }
-  
+
   // You can change the transition that is used
   // SLIDE_LEFT, SLIDE_RIGHT, SLIDE_TOP, SLIDE_DOWN
   ui.setFrameAnimation(SLIDE_LEFT);
@@ -262,37 +262,37 @@ void setup() {
   clockFrame[0] = drawClock;
   clockFrame[1] = drawWeather;
   ui.setOverlays(overlays, numberOfOverlays);
-  
+
   // Inital UI takes care of initalising the display too.
   ui.init();
   if (INVERT_DISPLAY) {
     display.flipScreenVertically();  //connections at top of OLED display
   }
-  
+
   // print the received signal strength:
-  Serial.print("Signal Strength (RSSI): ");
+  Serial.print("Puissance signal (RSSI): ");
   Serial.print(getWifiQuality());
   Serial.println("%");
 
   if (ENABLE_OTA) {
     ArduinoOTA.onStart([]() {
-      Serial.println("Start");
+      Serial.println("Début");
     });
     ArduinoOTA.onEnd([]() {
-      Serial.println("\nEnd");
+      Serial.println("\nFin");
     });
     ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
-      Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
+      Serial.printf("Progression: %u%%\r", (progress / (total / 100)));
     });
     ArduinoOTA.onError([](ota_error_t error) {
-      Serial.printf("Error[%u]: ", error);
-      if (error == OTA_AUTH_ERROR) Serial.println("Auth Failed");
-      else if (error == OTA_BEGIN_ERROR) Serial.println("Begin Failed");
-      else if (error == OTA_CONNECT_ERROR) Serial.println("Connect Failed");
-      else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
-      else if (error == OTA_END_ERROR) Serial.println("End Failed");
+      Serial.printf("Erreur[%u]: ", error);
+      if (error == OTA_AUTH_ERROR) Serial.println("Échec authentification");
+      else if (error == OTA_BEGIN_ERROR) Serial.println("Échec début");
+      else if (error == OTA_CONNECT_ERROR) Serial.println("Échec Connexion");
+      else if (error == OTA_RECEIVE_ERROR) Serial.println("Échec Réception");
+      else if (error == OTA_END_ERROR) Serial.println("Échec Fin");
     });
-    ArduinoOTA.setHostname((const char *)hostname.c_str()); 
+    ArduinoOTA.setHostname((const char *)hostname.c_str());
     if (OTA_Password != "") {
       ArduinoOTA.setPassword(((const char *)OTA_Password.c_str()));
     }
@@ -311,31 +311,31 @@ void setup() {
     serverUpdater.setup(&server, "/update", www_username, www_password);
     // Start the server
     server.begin();
-    Serial.println("Server started");
+    Serial.println("Serveur démarré");
     // Print the IP address
     String webAddress = "http://" + WiFi.localIP().toString() + ":" + String(WEBSERVER_PORT) + "/";
-    Serial.println("Use this URL : " + webAddress);
+    Serial.println("Utilisez cette URL : " + webAddress);
     display.clear();
     display.setTextAlignment(TEXT_ALIGN_CENTER);
     display.setFont(ArialMT_Plain_10);
-    display.drawString(64, 10, "Web Interface On");
-    display.drawString(64, 20, "You May Connect to IP");
+    display.drawString(64, 10, "Interface web activée");
+    display.drawString(64, 20, "Vous pouvez vous connecter à l'IP");
     display.setFont(ArialMT_Plain_16);
     display.drawString(64, 30, WiFi.localIP().toString());
     display.drawString(64, 46, "Port: " + String(WEBSERVER_PORT));
     display.display();
   } else {
-    Serial.println("Web Interface is Disabled");
+    Serial.println("Interface Web est désactivée");
     display.clear();
     display.setTextAlignment(TEXT_ALIGN_CENTER);
     display.setFont(ArialMT_Plain_10);
-    display.drawString(64, 10, "Web Interface is Off");
-    display.drawString(64, 20, "Enable in Settings.h");
-    display.display(); 
+    display.drawString(64, 10, "Interface Web éteinte");
+    display.drawString(64, 20, "Activer dans Settings.h");
+    display.display();
   }
   flashLED(5, 100);
   findMDNS();  //go find Printer Server by the hostname
-  Serial.println("*** Leaving setup()");
+  Serial.println("*** Départ install()");
 }
 
 void findMDNS() {
@@ -346,20 +346,20 @@ void findMDNS() {
   // over tcp, and get the number of available devices
   int n = MDNS.queryService("http", "tcp");
   if (n == 0) {
-    Serial.println("no services found - make sure Printer server is turned on");
+    Serial.println("aucun service trouvé - vérifiez que serveur impression est allumé.");
     return;
   }
-  Serial.println("*** Looking for " + PrinterHostName + " over mDNS");
+  Serial.println("*** Recherche de " + PrinterHostName + " sur mDNS");
   for (int i = 0; i < n; ++i) {
     // Going through every available service,
     // we're searching for the one whose hostname
     // matches what we want, and then get its IP
-    Serial.println("Found: " + MDNS.hostname(i));
+    Serial.println("Trouvé: " + MDNS.hostname(i));
     if (MDNS.hostname(i) == PrinterHostName) {
       IPAddress serverIp = MDNS.IP(i);
       PrinterServer = serverIp.toString();
       PrinterPort = MDNS.port(i); // save the port
-      Serial.println("*** Found Printer Server " + PrinterHostName + " http://" + PrinterServer + ":" + PrinterPort);
+      Serial.println("*** Serveur impression trouvé " + PrinterHostName + " http://" + PrinterServer + ":" + PrinterPort);
       writeSettings(); // update the settings
     }
   }
@@ -369,7 +369,7 @@ void findMDNS() {
 // Main Loop
 //************************************************************
 void loop() {
-  
+
    //Get Time Update
   if((getMinutesFromLastRefresh() >= minutesBetweenDataRefresh) || lastEpoch == 0) {
     getUpdateTime();
@@ -410,15 +410,15 @@ void getUpdateTime() {
   Serial.println();
 
   if (displayOn && DISPLAYWEATHER) {
-    Serial.println("Getting Weather Data...");
+    Serial.println("Obtenir données météo...");
     weatherClient.updateWeather();
   }
 
-  Serial.println("Updating Time...");
+  Serial.println("Màj de l'heure...");
   //Update the Time
   timeClient.updateTime();
   lastEpoch = timeClient.getCurrentEpoch();
-  Serial.println("Local time: " + timeClient.getAmPmFormattedTime());
+  Serial.println("Heure locale: " + timeClient.getAmPmFormattedTime());
 
   ledOnOff(false);  // turn off the LED
 }
@@ -426,7 +426,7 @@ void getUpdateTime() {
 boolean authentication() {
   if (IS_BASIC_AUTH && (strlen(www_username) >= 1 && strlen(www_password) >= 1)) {
     return server.authenticate(www_username, www_password);
-  } 
+  }
   return true; // Authentication not required
 }
 
@@ -434,7 +434,7 @@ void handleSystemReset() {
   if (!authentication()) {
     return server.requestAuthentication();
   }
-  Serial.println("Reset System Configuration");
+  Serial.println("Réinitialiser config. système");
   if (SPIFFS.remove(CONFIG)) {
     redirectHome();
     ESP.restart();
@@ -489,7 +489,7 @@ void handleUpdateConfig() {
   printerClient.getPrinterPsuState();
   if (INVERT_DISPLAY != flipOld) {
     ui.init();
-    if(INVERT_DISPLAY)     
+    if(INVERT_DISPLAY)
       display.flipScreenVertically();
     ui.update();
   }
@@ -525,7 +525,7 @@ void handleWeatherConfigure() {
 
   html = getHeader();
   server.sendContent(html);
-  
+
   String form = FPSTR(WEATHER_FORM);
   String isWeatherChecked = "";
   if (DISPLAYWEATHER) {
@@ -544,7 +544,7 @@ void handleWeatherConfigure() {
   options.replace(">"+String(WeatherLanguage)+"<", " selected>"+String(WeatherLanguage)+"<");
   form.replace("%LANGUAGEOPTIONS%", options);
   server.sendContent(form);
-  
+
   html = getFooter();
   server.sendContent(html);
   server.sendContent("");
@@ -568,50 +568,50 @@ void handleConfigure() {
   html = getHeader();
   server.sendContent(html);
 
-  CHANGE_FORM =       "<form class='w3-container' action='/updateconfig' method='get'><h2>Station Config:</h2>"
-                      "<p><label>" + printerClient.getPrinterType() + " API Key (get from your server)</label>"
+  CHANGE_FORM =       "<form class='w3-container' action='/updateconfig' method='get'><h2>Config. de la station:</h2>"
+                      "<p><label>" + printerClient.getPrinterType() + " Clé API (obtenue à partir de votre serveur)</label>"
                       "<input class='w3-input w3-border w3-margin-bottom' type='text' name='PrinterApiKey' id='PrinterApiKey' value='%OCTOKEY%' maxlength='60'></p>";
   if (printerClient.getPrinterType() == "OctoPrint") {
-    CHANGE_FORM +=      "<p><label>" + printerClient.getPrinterType() + " Host Name (usually octopi)</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='PrinterHostName' value='%OCTOHOST%' maxlength='60'></p>";                        
+    CHANGE_FORM +=      "<p><label>" + printerClient.getPrinterType() + " Nom de l'hôte (généralement octopi)</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='PrinterHostName' value='%OCTOHOST%' maxlength='60'></p>";
   }
-  CHANGE_FORM +=      "<p><label>" + printerClient.getPrinterType() + " Address (do not include http://)</label>"
+  CHANGE_FORM +=      "<p><label>" + printerClient.getPrinterType() + " Adresse (ne pas inclure http://)</label>"
                       "<input class='w3-input w3-border w3-margin-bottom' type='text' name='PrinterAddress' id='PrinterAddress' value='%OCTOADDRESS%' maxlength='60'></p>"
                       "<p><label>" + printerClient.getPrinterType() + " Port</label>"
                       "<input class='w3-input w3-border w3-margin-bottom' type='text' name='PrinterPort' id='PrinterPort' value='%OCTOPORT%' maxlength='5'  onkeypress='return isNumberKey(event)'></p>";
   if (printerClient.getPrinterType() == "Repetier") {
-    CHANGE_FORM +=    "<input type='button' value='Test Connection' onclick='testRepetier()'>"
+    CHANGE_FORM +=    "<input type='button' value='Test de la connexion' onclick='testRepetier()'>"
                       "<input type='hidden' id='selectedPrinter' value='" + printerClient.getPrinterName() + "'><p id='RepetierTest'></p>"
-                      "<script>testRepetier();</script>";                        
+                      "<script>testRepetier();</script>";
   } else {
-    CHANGE_FORM +=    "<input type='button' value='Test Connection and API JSON Response' onclick='testOctoPrint()'><p id='OctoPrintTest'></p>";
+    CHANGE_FORM +=    "<input type='button' value='Test de la connexion et réponse API JSON' onclick='testOctoPrint()'><p id='OctoPrintTest'></p>";
   }
-  CHANGE_FORM +=      "<p><label>" + printerClient.getPrinterType() + " User (only needed if you have haproxy or basic auth turned on)</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='octoUser' value='%OCTOUSER%' maxlength='30'></p>"
-                      "<p><label>" + printerClient.getPrinterType() + " Password </label><input class='w3-input w3-border w3-margin-bottom' type='password' name='octoPass' value='%OCTOPASS%'></p>";
+  CHANGE_FORM +=      "<p><label>" + printerClient.getPrinterType() + " Utilisateur (seulement si haproxy ou basic auth est activé)</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='octoUser' value='%OCTOUSER%' maxlength='30'></p>"
+                      "<p><label>" + printerClient.getPrinterType() + " Mot de passe </label><input class='w3-input w3-border w3-margin-bottom' type='password' name='octoPass' value='%OCTOPASS%'></p>";
 
 
 
   if (printerClient.getPrinterType() == "Repetier") {
     html = "<script>function testRepetier(){var e=document.getElementById(\"RepetierTest\"),r=document.getElementById(\"PrinterAddress\").value,"
-           "t=document.getElementById(\"PrinterPort\").value;if(\"\"==r||\"\"==t)return e.innerHTML=\"* Address and Port are required\","
+           "t=document.getElementById(\"PrinterPort\").value;if(\"\"==r||\"\"==t)return e.innerHTML=\"* L'adresse et le port sont requis\","
            "void(e.style.background=\"\");var n=\"http://\"+r+\":\"+t;n+=\"/printer/api/?a=listPrinter&apikey=\"+document.getElementById(\"PrinterApiKey\").value,"
            "console.log(n);var o=new XMLHttpRequest;o.open(\"GET\",n,!0),o.onload=function(){if(200===o.status){var r=JSON.parse(o.responseText);"
-           "if(!r.error&&r.length>0){var t=\"<label>Connected -- Select Printer</label> \";t+=\"<select class='w3-option w3-padding' name='printer'>\";"
+           "if(!r.error&&r.length>0){var t=\"<label>Connecté -- Sélectionner imprimante</label> \";t+=\"<select class='w3-option w3-padding' name='printer'>\";"
            "var n=document.getElementById(\"selectedPrinter\").value,i=\"\";for(printer in r)i=r[printer].slug==n?\"selected\":\"\","
            "t+=\"<option value='\"+r[printer].slug+\"' \"+i+\">\"+r[printer].name+\"</option>\";t+=\"</select>\","
-           "e.innerHTML=t,e.style.background=\"lime\"}else e.innerHTML=\"Error invalid API Key: \"+r.error,"
+           "e.innerHTML=t,e.style.background=\"lime\"}else e.innerHTML=\"Erreur Clé API invalide: \"+r.error,"
            "e.style.background=\"red\"}else e.innerHTML=\"Error: \"+o.statusText,e.style.background=\"red\"},"
-           "o.onerror=function(){e.innerHTML=\"Error connecting to server -- check IP and Port\",e.style.background=\"red\"},o.send(null)}</script>";
+           "o.onerror=function(){e.innerHTML=\"Erreur de connexion au serveur -- vérifier IP et Port\",e.style.background=\"red\"},o.send(null)}</script>";
 
     server.sendContent(html);
   } else {
     html = "<script>function testOctoPrint(){var e=document.getElementById(\"OctoPrintTest\"),t=document.getElementById(\"PrinterAddress\").value,"
-           "n=document.getElementById(\"PrinterPort\").value;if(e.innerHTML=\"\",\"\"==t||\"\"==n)return e.innerHTML=\"* Address and Port are required\","
+           "n=document.getElementById(\"PrinterPort\").value;if(e.innerHTML=\"\",\"\"==t||\"\"==n)return e.innerHTML=\"* L'adresse et le port sont requis\","
            "void(e.style.background=\"\");var r=\"http://\"+t+\":\"+n;r+=\"/api/job?apikey=\"+document.getElementById(\"PrinterApiKey\").value,window.open(r,\"_blank\").focus()}</script>";
     server.sendContent(html);
   }
-  
+
   String form = CHANGE_FORM;
-  
+
   form.replace("%OCTOKEY%", PrinterApiKey);
   form.replace("%OCTOHOST%", PrinterHostName);
   form.replace("%OCTOADDRESS%", PrinterServer);
@@ -622,7 +622,7 @@ void handleConfigure() {
   server.sendContent(form);
 
   form = FPSTR(CLOCK_FORM);
-  
+
   String isClockChecked = "";
   if (DISPLAYCLOCK) {
     isClockChecked = "checked='checked'";
@@ -648,7 +648,7 @@ void handleConfigure() {
     hasPSUchecked = "checked='checked'";
   }
   form.replace("%HAS_PSU_CHECKED%", hasPSUchecked);
-  
+
   String options = "<option>10</option><option>15</option><option>20</option><option>30</option><option>60</option>";
   options.replace(">"+String(minutesBetweenDataRefresh)+"<", " selected>"+String(minutesBetweenDataRefresh)+"<");
   form.replace("%OPTIONS%", options);
@@ -656,7 +656,7 @@ void handleConfigure() {
   server.sendContent(form);
 
   form = FPSTR(THEME_FORM);
-  
+
   String themeOptions = FPSTR(COLOR_THEMES);
   themeOptions.replace(">"+String(themeColor)+"<", " selected>"+String(themeColor)+"<");
   form.replace("%THEME_OPTIONS%", themeOptions);
@@ -670,7 +670,7 @@ void handleConfigure() {
   form.replace("%STATIONPASSWORD%", String(www_password));
 
   server.sendContent(form);
-  
+
   html = getFooter();
   server.sendContent(html);
   server.sendContent("");
@@ -693,7 +693,7 @@ void displayMessage(String message) {
   server.sendContent(String(html));
   server.sendContent("");
   server.client().stop();
-  
+
   ledOnOff(false);
 }
 
@@ -742,17 +742,17 @@ String getHeader(boolean refresh) {
 
 String getFooter() {
   int8_t rssi = getWifiQuality();
-  Serial.print("Signal Strength (RSSI): ");
+  Serial.print("Puissance signal (RSSI): ");
   Serial.print(rssi);
   Serial.println("%");
   String html = "<br><br><br>";
   html += "</div>";
   html += "<footer class='w3-container w3-bottom w3-theme w3-margin-top'>";
   if (lastReportStatus != "") {
-    html += "<i class='fa fa-external-link'></i> Report Status: " + lastReportStatus + "<br>";
+    html += "<i class='fa fa-external-link'></i> Statut rapport: " + lastReportStatus + "<br>";
   }
   html += "<i class='fa fa-paper-plane-o'></i> Version: " + String(VERSION) + "<br>";
-  html += "<i class='fa fa-rss'></i> Signal Strength: ";
+  html += "<i class='fa fa-rss'></i> Puissance signal: ";
   html += String(rssi) + "%";
   html += "</footer>";
   html += "</body></html>";
@@ -774,55 +774,55 @@ void displayPrinterStatus() {
   if (IS_24HOUR) {
     displayTime = timeClient.getHours() + ":" + timeClient.getMinutes() + ":" + timeClient.getSeconds();
   }
-  
+
   html += "<div class='w3-cell-row' style='width:100%'><h2>" + printerClient.getPrinterType() + " Monitor</h2></div><div class='w3-cell-row'>";
   html += "<div class='w3-cell w3-container' style='width:100%'><p>";
   if (printerClient.getPrinterType() == "Repetier") {
-    html += "Printer Name: " + printerClient.getPrinterName() + " <a href='/configure' title='Configure'><i class='fa fa-cog'></i></a><br>";
+    html += "Nom de l'imprimante: " + printerClient.getPrinterName() + " <a href='/configure' title='Configure'><i class='fa fa-cog'></i></a><br>";
   } else {
-    html += "Host Name: " + PrinterHostName + " <a href='/configure' title='Configure'><i class='fa fa-cog'></i></a><br>";
+    html += "Nom de l'hôte: " + PrinterHostName + " <a href='/configure' title='Configure'><i class='fa fa-cog'></i></a><br>";
   }
- 
+
   if (printerClient.getError() != "") {
-    html += "Status: Offline<br>";
-    html += "Reason: " + printerClient.getError() + "<br>";
+    html += "Statut : Hors ligne<br>";
+    html += "Raison: " + printerClient.getError() + "<br>";
   } else {
-    html += "Status: " + printerClient.getState();
-    if (printerClient.isPSUoff() && HAS_PSU) {  
+    html += "Statut: " + printerClient.getState();
+    if (printerClient.isPSUoff() && HAS_PSU) {
       html += ", PSU off";
     }
     html += "<br>";
   }
-  
+
   if (printerClient.isPrinting()) {
-    html += "File: " + printerClient.getFileName() + "<br>";
+    html += "Fichier: " + printerClient.getFileName() + "<br>";
     float fileSize = printerClient.getFileSize().toFloat();
     if (fileSize > 0) {
       fileSize = fileSize / 1024;
-      html += "File Size: " + String(fileSize) + "KB<br>";
+      html += "Taille du fichier: " + String(fileSize) + "KB<br>";
     }
     int filamentLength = printerClient.getFilamentLength().toInt();
     if (filamentLength > 0) {
       float fLength = float(filamentLength) / 1000;
       html += "Filament: " + String(fLength) + "m<br>";
     }
-  
-    html += "Tool Temperature: " + printerClient.getTempToolActual() + "&#176; C<br>";
+
+    html += "Température tête: " + printerClient.getTempToolActual() + "&#176; C<br>";
     if ( printerClient.getTempBedActual() != 0 ) {
-        html += "Bed Temperature: " + printerClient.getTempBedActual() + "&#176; C<br>";
+        html += "Température lit: " + printerClient.getTempBedActual() + "&#176; C<br>";
     }
-    
+
     int val = printerClient.getProgressPrintTimeLeft().toInt();
     int hours = numberOfHours(val);
     int minutes = numberOfMinutes(val);
     int seconds = numberOfSeconds(val);
-    html += "Est. Print Time Left: " + zeroPad(hours) + ":" + zeroPad(minutes) + ":" + zeroPad(seconds) + "<br>";
-  
+    html += "Temps impr. restant: " + zeroPad(hours) + ":" + zeroPad(minutes) + ":" + zeroPad(seconds) + "<br>";
+
     val = printerClient.getProgressPrintTime().toInt();
     hours = numberOfHours(val);
     minutes = numberOfMinutes(val);
     seconds = numberOfSeconds(val);
-    html += "Printing Time: " + zeroPad(hours) + ":" + zeroPad(minutes) + ":" + zeroPad(seconds) + "<br>";
+    html += "Temps impr.: " + zeroPad(hours) + ":" + zeroPad(minutes) + ":" + zeroPad(seconds) + "<br>";
     html += "<style>#myProgress {width: 100%;background-color: #ddd;}#myBar {width: " + printerClient.getProgressCompletion() + "%;height: 30px;background-color: #4CAF50;}</style>";
     html += "<div id=\"myProgress\"><div id=\"myBar\" class=\"w3-medium w3-center\">" + printerClient.getProgressCompletion() + "%</div></div>";
   } else {
@@ -835,27 +835,27 @@ void displayPrinterStatus() {
 
   server.sendContent(html); // spit out what we got
   html = "";
-  
+
   if (DISPLAYWEATHER) {
     if (weatherClient.getCity(0) == "") {
-      html += "<p>Please <a href='/configureweather'>Configure Weather</a> API</p>";
+      html += "<p>Please <a href='/configureweather'>Configurer météo</a> API</p>";
       if (weatherClient.getError() != "") {
-        html += "<p>Weather Error: <strong>" + weatherClient.getError() + "</strong></p>";
+        html += "<p>Erreur météo: <strong>" + weatherClient.getError() + "</strong></p>";
       }
     } else {
       html += "<div class='w3-cell-row' style='width:100%'><h2>" + weatherClient.getCity(0) + ", " + weatherClient.getCountry(0) + "</h2></div><div class='w3-cell-row'>";
       html += "<div class='w3-cell w3-left w3-medium' style='width:120px'>";
       html += "<img src='http://openweathermap.org/img/w/" + weatherClient.getIcon(0) + ".png' alt='" + weatherClient.getDescription(0) + "'><br>";
-      html += weatherClient.getHumidity(0) + "% Humidity<br>";
-      html += weatherClient.getWind(0) + " <span class='w3-tiny'>" + getSpeedSymbol() + "</span> Wind<br>";
+      html += weatherClient.getHumidity(0) + "% Humidité<br>";
+      html += weatherClient.getWind(0) + " <span class='w3-tiny'>" + getSpeedSymbol() + "</span> Vent<br>";
       html += "</div>";
       html += "<div class='w3-cell w3-container' style='width:100%'><p>";
       html += weatherClient.getCondition(0) + " (" + weatherClient.getDescription(0) + ")<br>";
       html += weatherClient.getTempRounded(0) + getTempSymbol(true) + "<br>";
-      html += "<a href='https://www.google.com/maps/@" + weatherClient.getLat(0) + "," + weatherClient.getLon(0) + ",10000m/data=!3m1!1e3' target='_BLANK'><i class='fa fa-map-marker' style='color:red'></i> Map It!</a><br>";
+      html += "<a href='https://www.google.com/maps/@" + weatherClient.getLat(0) + "," + weatherClient.getLon(0) + ",10000m/data=!3m1!1e3' target='_BLANK'><i class='fa fa-map-marker' style='color:red'></i> Afficher la carte!</a><br>";
       html += "</p></div></div>";
     }
-    
+
     server.sendContent(html); // spit out what we got
     html = ""; // fresh start
   }
@@ -867,24 +867,24 @@ void displayPrinterStatus() {
 }
 
 void configModeCallback (WiFiManager *myWiFiManager) {
-  Serial.println("Entered config mode");
+  Serial.println("Entrée mode config.");
   Serial.println(WiFi.softAPIP());
 
   display.clear();
   display.setTextAlignment(TEXT_ALIGN_CENTER);
   display.setFont(ArialMT_Plain_10);
   display.drawString(64, 0, "Wifi Manager");
-  display.drawString(64, 10, "Please connect to AP");
+  display.drawString(64, 10, "Connectez-vous à AP");
   display.setFont(ArialMT_Plain_16);
   display.drawString(64, 26, myWiFiManager->getConfigPortalSSID());
   display.setFont(ArialMT_Plain_10);
-  display.drawString(64, 46, "To setup Wifi connection");
+  display.drawString(64, 46, "Pour config. connex. Wifi");
   display.display();
-  
+
   Serial.println("Wifi Manager");
-  Serial.println("Please connect to AP");
+  Serial.println("Connectez-vous à AP");
   Serial.println(myWiFiManager->getConfigPortalSSID());
-  Serial.println("To setup Wifi Configuration");
+  Serial.println("Pour configurer le Wifi");
   flashLED(20, 50);
 }
 
@@ -914,10 +914,10 @@ void drawScreen1(OLEDDisplay *display, OLEDDisplayUiState* state, int16_t x, int
   display->setTextAlignment(TEXT_ALIGN_CENTER);
   display->setFont(ArialMT_Plain_16);
   if (bed != "0") {
-    display->drawString(29 + x, 0 + y, "Tool");
-    display->drawString(89 + x, 0 + y, "Bed");
+    display->drawString(29 + x, 0 + y, "Tête");
+    display->drawString(89 + x, 0 + y, "Lit");
   } else {
-    display->drawString(64 + x, 0 + y, "Tool Temp");
+    display->drawString(64 + x, 0 + y, "Tête Temp");
   }
   display->setTextAlignment(TEXT_ALIGN_LEFT);
   display->setFont(ArialMT_Plain_24);
@@ -935,7 +935,7 @@ void drawScreen2(OLEDDisplay *display, OLEDDisplayUiState* state, int16_t x, int
   display->setTextAlignment(TEXT_ALIGN_CENTER);
   display->setFont(ArialMT_Plain_16);
 
-  display->drawString(64 + x, 0 + y, "Time Remaining");
+  display->drawString(64 + x, 0 + y, "Temps Restant");
   //display->setTextAlignment(TEXT_ALIGN_LEFT);
   display->setFont(ArialMT_Plain_24);
   int val = printerClient.getProgressPrintTimeLeft().toInt();
@@ -951,7 +951,7 @@ void drawScreen3(OLEDDisplay *display, OLEDDisplayUiState* state, int16_t x, int
   display->setTextAlignment(TEXT_ALIGN_CENTER);
   display->setFont(ArialMT_Plain_16);
 
-  display->drawString(64 + x, 0 + y, "Printing Time");
+  display->drawString(64 + x, 0 + y, "Temps impression");
   //display->setTextAlignment(TEXT_ALIGN_LEFT);
   display->setFont(ArialMT_Plain_24);
   int val = printerClient.getProgressPrintTime().toInt();
@@ -965,10 +965,10 @@ void drawScreen3(OLEDDisplay *display, OLEDDisplayUiState* state, int16_t x, int
 
 void drawClock(OLEDDisplay *display, OLEDDisplayUiState* state, int16_t x, int16_t y) {
   display->setTextAlignment(TEXT_ALIGN_CENTER);
-  
+
   String displayTime = timeClient.getAmPmHours() + ":" + timeClient.getMinutes() + ":" + timeClient.getSeconds();
   if (IS_24HOUR) {
-    displayTime = timeClient.getHours() + ":" + timeClient.getMinutes() + ":" + timeClient.getSeconds(); 
+    displayTime = timeClient.getHours() + ":" + timeClient.getMinutes() + ":" + timeClient.getSeconds();
   }
   String displayName = PrinterHostName;
   if (printerClient.getPrinterType() == "Repetier") {
@@ -1035,7 +1035,7 @@ void drawHeaderOverlay(OLEDDisplay *display, OLEDDisplayUiState* state) {
   }
   display->setTextAlignment(TEXT_ALIGN_LEFT);
   display->drawString(0, 48, displayTime);
-  
+
   if (!IS_24HOUR) {
     String ampm = timeClient.getAmPm();
     display->setFont(ArialMT_Plain_10);
@@ -1046,7 +1046,7 @@ void drawHeaderOverlay(OLEDDisplay *display, OLEDDisplayUiState* state) {
   display->setTextAlignment(TEXT_ALIGN_LEFT);
   String percent = String(printerClient.getProgressCompletion()) + "%";
   display->drawString(64, 48, percent);
-  
+
   // Draw indicator to show next update
   int updatePos = (printerClient.getProgressCompletion().toFloat() / float(100)) * 128;
   display->drawRect(0, 41, 128, 6);
@@ -1054,7 +1054,7 @@ void drawHeaderOverlay(OLEDDisplay *display, OLEDDisplayUiState* state) {
   display->drawHorizontalLine(0, 43, updatePos);
   display->drawHorizontalLine(0, 44, updatePos);
   display->drawHorizontalLine(0, 45, updatePos);
-  
+
   drawRssi(display);
 }
 
@@ -1067,29 +1067,29 @@ void drawClockHeaderOverlay(OLEDDisplay *display, OLEDDisplayUiState* state) {
     display->setTextAlignment(TEXT_ALIGN_CENTER);
     if (printerClient.isPSUoff()) {
       display->drawString(64, 47, "psu off");
-    } else if (printerClient.getState() == "Operational") {
-      display->drawString(64, 47, "online");
+    } else if (printerClient.getState() == "Opérationnel") {
+      display->drawString(64, 47, "en ligne");
     } else {
-      display->drawString(64, 47, "offline");
+      display->drawString(64, 47, "hors ligne");
     }
   } else {
     if (printerClient.isPSUoff()) {
       display->drawString(0, 47, "psu off");
-    } else if (printerClient.getState() == "Operational") {
-      display->drawString(0, 47, "online");
+    } else if (printerClient.getState() == "Opérationnel") {
+      display->drawString(0, 47, "en ligne");
     } else {
-      display->drawString(0, 47, "offline");
+      display->drawString(0, 47, "hors ligne");
     }
   }
   display->setTextAlignment(TEXT_ALIGN_LEFT);
   display->drawRect(0, 43, 128, 2);
- 
+
   drawRssi(display);
 }
 
 void drawRssi(OLEDDisplay *display) {
 
- 
+
   int8_t quality = getWifiQuality();
   for (int8_t i = 0; i < 4; i++) {
     for (int8_t j = 0; j < 3 * (i + 2); j++) {
@@ -1117,9 +1117,9 @@ void writeSettings() {
   // Save decoded message to SPIFFS file for playback on power up.
   File f = SPIFFS.open(CONFIG, "w");
   if (!f) {
-    Serial.println("File open failed!");
+    Serial.println("Ouverture fichier échoué!");
   } else {
-    Serial.println("Saving settings now...");
+    Serial.println("Sauvegarder paramètres maintenant...");
     f.println("UtcOffset=" + String(UtcOffset));
     f.println("printerApiKey=" + PrinterApiKey);
     f.println("printerHostName=" + PrinterHostName);
@@ -1151,7 +1151,7 @@ void writeSettings() {
 
 void readSettings() {
   if (SPIFFS.exists(CONFIG) == false) {
-    Serial.println("Settings File does not yet exists.");
+    Serial.println("Fichier paramètres n'existe pas.");
     writeSettings();
     return;
   }
@@ -1298,12 +1298,12 @@ void checkDisplay() {
     display.setFont(ArialMT_Plain_16);
     display.setTextAlignment(TEXT_ALIGN_CENTER);
     display.setContrast(255); // default is 255
-    display.drawString(64, 5, "Printer Offline\nSleep Mode...");
+    display.drawString(64, 5, "Imprimante hors ligne\nEn veille...");
     display.display();
     delay(5000);
     enableDisplay(false);
-    Serial.println("Printer is offline going down to sleep...");
-    return;    
+    Serial.println("Imprimante hors ligne, entre en veille...");
+    return;
   } else if (!displayOn && !DISPLAYCLOCK) {
     if (printerClient.isOperational()) {
       // Wake the Screen up
@@ -1313,15 +1313,15 @@ void checkDisplay() {
       display.setFont(ArialMT_Plain_16);
       display.setTextAlignment(TEXT_ALIGN_CENTER);
       display.setContrast(255); // default is 255
-      display.drawString(64, 5, "Printer Online\nWake up...");
+      display.drawString(64, 5, "Imprimante en ligne\nRéveil...");
       display.display();
-      Serial.println("Printer is online waking up...");
+      Serial.println("Imprimante en ligne, se réveille...");
       delay(5000);
       return;
     }
   } else if (DISPLAYCLOCK) {
     if ((!printerClient.isPrinting() || printerClient.isPSUoff()) && !isClockOn) {
-      Serial.println("Clock Mode is turned on.");
+      Serial.println("Mode horloge est activé.");
       if (!DISPLAYWEATHER) {
         ui.disableAutoTransition();
         ui.setFrames(clockFrame, 1);
@@ -1335,7 +1335,7 @@ void checkDisplay() {
       ui.setOverlays(clockOverlay, numberOfOverlays);
       isClockOn = true;
     } else if (printerClient.isPrinting() && !printerClient.isPSUoff() && isClockOn) {
-      Serial.println("Printer Monitor is active.");
+      Serial.println("Printer Monitor est activé.");
       ui.setFrames(frames, numberOfFrames);
       ui.setOverlays(overlays, numberOfOverlays);
       ui.enableAutoTransition();
@@ -1353,10 +1353,10 @@ void enableDisplay(boolean enable) {
       displayOffEpoch = 0;  // reset
     }
     display.displayOn();
-    Serial.println("Display was turned ON: " + timeClient.getFormattedTime());
+    Serial.println("L'écran a été allumé: " + timeClient.getFormattedTime());
   } else {
     display.displayOff();
-    Serial.println("Display was turned OFF: " + timeClient.getFormattedTime());
+    Serial.println("L'écran a été éteint: " + timeClient.getFormattedTime());
     displayOffEpoch = lastEpoch;
   }
 }

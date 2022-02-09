@@ -48,10 +48,10 @@ boolean RepetierClient::validate() {
   boolean rtnValue = false;
   printerData.error = "";
   if (String(myServer) == "") {
-    printerData.error += "Server address is required; ";
+    printerData.error += "Adresse du serveur requise; ";
   }
   if (myApiKey == "") {
-    printerData.error += "ApiKey is required; ";
+    printerData.error += "Clé Api requise; ";
   }
   if (printerData.error == "") {
     rtnValue = true;
@@ -63,32 +63,32 @@ WiFiClient RepetierClient::getSubmitRequest(String apiGetData) {
   WiFiClient printClient;
   printClient.setTimeout(5000);
 
-  Serial.println("Getting Repetier Data via GET");
+  Serial.println("Obtenir données Repetier via GET");
   Serial.println(apiGetData);
   result = "";
   if (printClient.connect(myServer, myPort)) {  //starts client connection, checks for connection
     printClient.println(apiGetData);
-    printClient.println("Host: " + String(myServer) + ":" + String(myPort));
+    printClient.println("Hôte: " + String(myServer) + ":" + String(myPort));
     printClient.println("X-Api-Key: " + myApiKey);
     if (encodedAuth != "") {
-      printClient.print("Authorization: ");
+      printClient.print("Autorisation: ");
       printClient.println("Basic " + encodedAuth);
     }
     printClient.println("User-Agent: ArduinoWiFi/1.1");
-    printClient.println("Connection: close");
+    printClient.println("Connexion: fermée");
     if (printClient.println() == 0) {
-      Serial.println("Connection to " + String(myServer) + ":" + String(myPort) + " failed.");
+      Serial.println("Connexion à " + String(myServer) + ":" + String(myPort) + " échoué.");
       Serial.println();
       resetPrintData();
-      printerData.error = "Connection to " + String(myServer) + ":" + String(myPort) + " failed.";
+      printerData.error = "Connexion à " + String(myServer) + ":" + String(myPort) + " échoué.";
       return printClient;
     }
-  } 
+  }
   else {
-    Serial.println("Connection to Repetier failed: " + String(myServer) + ":" + String(myPort)); //error message if no client connect
+    Serial.println("Connexion à Repetier échoué: " + String(myServer) + ":" + String(myPort)); //error message if no client connect
     Serial.println();
     resetPrintData();
-    printerData.error = "Connection to Repetier failed: " + String(myServer) + ":" + String(myPort);
+    printerData.error = "Connexion à Repetier échoué: " + String(myServer) + ":" + String(myPort);
     return printClient;
   }
 /*
@@ -130,9 +130,9 @@ void RepetierClient::getPrinterJobResults() {
 
   // Parse JSON object
   JsonArray& root = jsonBuffer.parseArray(printClient);
-    
+
   if (!root.success()) {
-    printerData.error = "Repetier Data Parsing failed: " + String(myServer) + ":" + String(myPort);
+    printerData.error = "Echec analyse données Repetier: " + String(myServer) + ":" + String(myPort);
     Serial.println(printerData.error);
     printerData.state = "";
     return;
@@ -140,17 +140,17 @@ void RepetierClient::getPrinterJobResults() {
 
   int inx = 0;
   int count = root.size();
-  Serial.println("Size of root: " + String(count));
+  Serial.println("Taille de la racine: " + String(count));
   for (int i = 0; i < count; i++) {
-    Serial.println("Printer: " + String((const char*)root[i]["slug"]));
+    Serial.println("Imprimante: " + String((const char*)root[i]["slug"]));
     if (String((const char*)root[i]["slug"]) == printerData.printerName) {
       inx = i;
       break;
     }
   }
-  
+
   JsonObject& pr = root[inx];
-  
+
   //printerData.averagePrintTime = (const char*)pr[""];
   printerData.estimatedPrintTime = (const char*)pr["printTime"];
   printerData.fileName = (const char*) pr["job"];
@@ -172,7 +172,7 @@ void RepetierClient::getPrinterJobResults() {
   if (printerData.progressPrintTime != "") {
     timeElap= atol(pr["printedTimeComp"]);
   }
-  timeLeft = timeTot-timeElap; 
+  timeLeft = timeTot-timeElap;
   printerData.progressPrintTimeLeft = String(timeLeft);
 
   if (printerData.fileName != "none") {
@@ -181,14 +181,14 @@ void RepetierClient::getPrinterJobResults() {
     printerData.isPrinting = false;
   }
 
-  if (printerData.isPrinting) {  
-    Serial.println("Printing: " + printerData.fileName);
+  if (printerData.isPrinting) {
+    Serial.println("Impression: " + printerData.fileName);
   }
-  
+
   if (isOperational()) {
-    Serial.println("Status: " + printerData.state);
+    Serial.println("Statut: " + printerData.state);
   } else {
-    Serial.println("Printer Not Operational");
+    Serial.println("Imprimante pas opérationnelle");
   }
 
   //**** get the Printer Temps and Stat
@@ -221,7 +221,7 @@ void RepetierClient::getPrinterJobResults() {
   printerData.bedTargetTemp = (const char*) pr2["heatedBeds"][0]["tempSet"];
 
   if (printerData.isPrinting) {
-    Serial.println("Status: " + printerData.state + " " + printerData.fileName + "(" + printerData.progressCompletion + "%)");
+    Serial.println("Statut: " + printerData.state + " " + printerData.fileName + "(" + printerData.progressCompletion + "%)");
   }
 }
 
@@ -277,7 +277,7 @@ String RepetierClient::getProgressCompletion() {
 }
 
 String RepetierClient::getProgressFilepos() {
-  return printerData.progressFilepos;  
+  return printerData.progressFilepos;
 }
 
 String RepetierClient::getProgressPrintTime() {
@@ -293,9 +293,9 @@ String RepetierClient::getProgressPrintTimeLeft() {
 }
 
 String RepetierClient::getState() {
-  String rtnValue = "Offline";
+  String rtnValue = "Hors ligne";
   if (printerData.state == "1") {
-    rtnValue = "Operational";
+    rtnValue = "Opérationnel";
   }
   return rtnValue;
 }

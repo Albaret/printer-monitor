@@ -33,16 +33,16 @@ TimeClient::TimeClient(float utcOffset) {
 
 void TimeClient::updateTime() {
   WiFiClient client;
-  
+
   if (!client.connect(ntpServerName, httpPort)) {
-    Serial.println("connection failed");
+    Serial.println("connexion échouée");
     return;
   }
 
   // This will send the request to the server
   client.print(String("GET / HTTP/1.1\r\n") +
-               String("Host: www.google.com\r\n") +
-               String("Connection: close\r\n\r\n"));
+               String("Hôte: www.google.com\r\n") +
+               String("Connexion: fermée\r\n\r\n"));
   int repeatCounter = 0;
   while(!client.available() && repeatCounter < 10) {
     delay(1000);

@@ -45,25 +45,25 @@ void OpenWeatherMapClient::updateWeather() {
   WiFiClient weatherClient;
   String apiGetData = "GET /data/2.5/group?id=" + myCityIDs + "&units=" + units + "&cnt=1&APPID=" + myApiKey + "&lang=" + lang + " HTTP/1.1";
 
-  Serial.println("Getting Weather Data");
+  Serial.println("Obtenir données météo");
   Serial.println(apiGetData);
   result = "";
   if (weatherClient.connect(servername, 80)) {  //starts client connection, checks for connection
     weatherClient.println(apiGetData);
-    weatherClient.println("Host: " + String(servername));
+    weatherClient.println("Hôte: " + String(servername));
     weatherClient.println("User-Agent: ArduinoWiFi/1.1");
-    weatherClient.println("Connection: close");
+    weatherClient.println("Connexion : fermée");
     weatherClient.println();
-  } 
+  }
   else {
-    Serial.println("connection for weather data failed"); //error message if no client connect
+    Serial.println("Connexion données météo échouée"); //error message if no client connect
     Serial.println();
     return;
   }
 
   while(weatherClient.connected() && !weatherClient.available()) delay(1); //waits for data
- 
-  Serial.println("Waiting for data");
+
+  Serial.println("Attente données");
 
   // Check HTTP status
   char status[32] = {0};
@@ -90,18 +90,18 @@ void OpenWeatherMapClient::updateWeather() {
   // Parse JSON object
   JsonObject& root = jsonBuffer.parseObject(weatherClient);
   if (!root.success()) {
-    Serial.println(F("Weather Data Parsing failed!"));
-    weathers[0].error = "Weather Data Parsing failed!";
+    Serial.println(F("Echec analyse données météo!"));
+    weathers[0].error = "Echec analyse données météo!";
     return;
   }
 
   weatherClient.stop(); //stop client
 
   if (root.measureLength() <= 150) {
-    Serial.println("Error Does not look like we got the data.  Size: " + String(root.measureLength()));
+    Serial.println("Erreur, il n'y a pas de données.  Taille : " + String(root.measureLength()));
     weathers[0].cached = true;
     weathers[0].error = (const char*)root["message"];
-    Serial.println("Error: " + weathers[0].error);
+    Serial.println("Erreur: " + weathers[0].error);
     return;
   }
   int count = root["cnt"];
@@ -123,17 +123,17 @@ void OpenWeatherMapClient::updateWeather() {
     Serial.println("lat: " + weathers[inx].lat);
     Serial.println("lon: " + weathers[inx].lon);
     Serial.println("dt: " + weathers[inx].dt);
-    Serial.println("city: " + weathers[inx].city);
-    Serial.println("country: " + weathers[inx].country);
+    Serial.println("ville: " + weathers[inx].city);
+    Serial.println("pays: " + weathers[inx].country);
     Serial.println("temp: " + weathers[inx].temp);
-    Serial.println("humidity: " + weathers[inx].humidity);
+    Serial.println("humidité: " + weathers[inx].humidity);
     Serial.println("condition: " + weathers[inx].condition);
-    Serial.println("wind: " + weathers[inx].wind);
-    Serial.println("weatherId: " + weathers[inx].weatherId);
+    Serial.println("vent: " + weathers[inx].wind);
+    Serial.println("météoId: " + weathers[inx].weatherId);
     Serial.println("description: " + weathers[inx].description);
     Serial.println("icon: " + weathers[inx].icon);
     Serial.println();
-    
+
   }
 }
 
@@ -150,7 +150,7 @@ void OpenWeatherMapClient::updateCityIdList(int CityIDs[], int cityCount) {
       if (myCityIDs != "") {
         myCityIDs = myCityIDs + ",";
       }
-      myCityIDs = myCityIDs + String(CityIDs[inx]); 
+      myCityIDs = myCityIDs + String(CityIDs[inx]);
     }
   }
 }
@@ -250,7 +250,7 @@ String OpenWeatherMapClient::getWeatherIcon(int index)
     case 802: W = "H"; break;
     case 803: W = "H"; break;
     case 804: W = "Y"; break;
-    
+
     case 200: W = "0"; break;
     case 201: W = "0"; break;
     case 202: W = "0"; break;
@@ -261,7 +261,7 @@ String OpenWeatherMapClient::getWeatherIcon(int index)
     case 230: W = "0"; break;
     case 231: W = "0"; break;
     case 232: W = "0"; break;
-    
+
     case 300: W = "R"; break;
     case 301: W = "R"; break;
     case 302: W = "R"; break;
@@ -271,7 +271,7 @@ String OpenWeatherMapClient::getWeatherIcon(int index)
     case 313: W = "R"; break;
     case 314: W = "R"; break;
     case 321: W = "R"; break;
-    
+
     case 500: W = "R"; break;
     case 501: W = "R"; break;
     case 502: W = "R"; break;
@@ -282,7 +282,7 @@ String OpenWeatherMapClient::getWeatherIcon(int index)
     case 521: W = "R"; break;
     case 522: W = "R"; break;
     case 531: W = "R"; break;
-    
+
     case 600: W = "W"; break;
     case 601: W = "W"; break;
     case 602: W = "W"; break;
@@ -293,7 +293,7 @@ String OpenWeatherMapClient::getWeatherIcon(int index)
     case 620: W = "W"; break;
     case 621: W = "W"; break;
     case 622: W = "W"; break;
-    
+
     case 701: W = "M"; break;
     case 711: W = "M"; break;
     case 721: W = "M"; break;
@@ -304,8 +304,8 @@ String OpenWeatherMapClient::getWeatherIcon(int index)
     case 762: W = "M"; break;
     case 771: W = "M"; break;
     case 781: W = "M"; break;
-    
-    default:break; 
+
+    default:break;
   }
   return W;
 }
